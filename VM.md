@@ -69,6 +69,9 @@ config.vm.network "private_network", ip: "192.168.33.10"
 
 Then run, `vagrant reload`. 
 
-## SSH Keys
+## Doing it once again.
+
+* Create a new VM with vagrant in /boxes/node0.
+* Enable private networking, but with a different ip address.
 
 
