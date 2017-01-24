@@ -1,3 +1,5 @@
+[Virtual Machine](VM.md) | [Ansible](Ansible.md) | [Playbooks](Playbooks.md)
+
 **To be continued**
 
 Commands/Modules
