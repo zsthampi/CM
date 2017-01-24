@@ -51,15 +51,11 @@ Now, run the ping test again to make sure you can actually talk to the node!
 
 #### Performing configuration management
     
-Let's install a web server, called nginx (say like engine-X), on the node.
+Let's install a web server, called nginx (say like engine-X), on the node. The web server will automatically start.
 
     ansible all -s -m apt -i inventory -a 'pkg=nginx state=installed update_cache=true'
-    
-Start the web server.
-    
-    ansible all -s -m shell -i inventory  -a 'nginx'
 
-Open a browser and enter in your node's ip address, e.g. http://192.168.1.100:8080/
+Open a browser and enter in your node's ip address, e.g. http://192.168.1.100:80/
 
 Removing nginx.
 
