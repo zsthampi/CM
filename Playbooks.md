@@ -48,14 +48,73 @@ Mixing `register`, `changed_when`, and `with_items` can get tricky. Based on con
 
 Ok. Check out [results.yml](examples/results.yml). There is a task that downloads a file. But since it uses the `shell` command it doesn't know that the task has already been done. It isn't idempotent and it will wastefully download the file over and over again!
 
-Change the command so that there is a task that first checks if 
-
-
+* Change the command so that there is a task that [first checks if the file already exists](http://docs.ansible.com/ansible/stat_module.html) in /tmp. Only download when it doesn't exist by adding a `when` condition. Note that the it is possible to pass this option to the shell command, however, it there are some limits to this approach: `creates={{dest_dir}}/{{exchange_item}}"`.
 
 ### Templates
 
+Templates are powerful ways to setup basic configuration settings without hard coding values.
+When you use a template, it will get the template, fill in any parameters, and then copy the file over to the destination. 
+
+For example, a template file, called `.my.cnf.j2` containing the following:
+
+```ini
+[client]
+user=root
+password={{root_db_password}}
+local_infile=1
+```
+
+Can be instantiated and copied to a server with the following task.
+
+```yaml
+- name: copy .my.cnf file with mysql root password credentials
+  template: src=templates/root/.my.cnf dest={{ ansible_env.HOME}}/.my.cnf owner={{mysql_account}} mode=0600
+```
+
+This can be useful for setting up complex configuration files such as apache, mysql, or jenkins. 
+
 ### Vaults
 
-You can 
+It is possible to store secrets encrypted using [ansible-vault](http://docs.ansible.com/ansible/playbooks_vault.html). This is recommended if you need to store tokens, passwords, or ssh keys.
 
-### Roles
+### Content Layout/Roles
+
+Finally, as your playbooks grow more complex in size, you will start to think about ways to organize and seperate out tasks.
+
+Ansible describes some recommended way to organize your playbooks:
+http://docs.ansible.com/ansible/playbooks_best_practices.html#content-organization
+
+An important part of organization is [roles](http://docs.ansible.com/ansible/playbooks_roles.html). Roles allow for you to essentially "include" in other playbooks. However, they use a particular layout to organize content.
+
+Folder layout:
+```
+- roles/
+  - setup/
+    - tasks/
+      - main.yml
+    - templates/
+      .my.cnf
+- playbook.yml
+```
+
+An example use of roles:
+
+```yaml
+---
+- hosts: dbservers
+  vars_prompt:
+    - name: run_schema_import
+      prompt: "Do import of data (schema/import)? Y: Will destory existing data. N: Will skip"
+      default: "N"
+  # This loads sudo password from encrypted vault
+  vars_files:
+    - vault/dbservers.vars
+  vars: 
+    - VersionBotDB: VersionsDB
+
+  roles: 
+    - { role: schema, when: run_schema_import == "Y" or run_schema_import == "y" }
+    - indexes
+    - import
+    - users
+```
