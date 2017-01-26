@@ -1,7 +1,10 @@
 [Virtual Machine](VM.md) | [Ansible](Ansible.md) | [Playbooks](Playbooks.md)
 
+Although you can run ad-hoc commands in ansible, in practice, you'll largely be expected to create ansible playbooks. Ansible playbooks are essentially files formatted as [yaml](http://docs.ansible.com/ansible/YAMLSyntax.html).
+
 ### Commands/Modules
 
+The simpliest way to get started is to try executing some basic tasks inside of a playbook.
 In examples folder, execute the [commands.yml](examples/commands.yml) playbook.
 
 ```bash
@@ -64,7 +67,7 @@ password={{root_db_password}}
 local_infile=1
 ```
 
-Can be instantiated and copied to a server with the following task.
+Templates can be instantiated and copied to a server with the following task.
 
 ```yaml
 - name: copy .my.cnf file with mysql root password credentials
@@ -72,6 +75,8 @@ Can be instantiated and copied to a server with the following task.
 ```
 
 This can be useful for setting up complex configuration files such as apache, mysql, or jenkins. 
+
+**See if you can create a new task using a template**.
 
 ### Vaults
 
@@ -118,3 +123,7 @@ An example use of roles:
     - import
     - users
 ```
+
+### Everything else
+
+The ansible community supports a wide collection of modules to do amazing things. It is possible to build custom modules or programmatically interface with ansible. Learning ansible will be tricky, but the investiment can be worth it!
