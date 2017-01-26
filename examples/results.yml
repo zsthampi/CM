@@ -1,5 +1,5 @@
 ---
-- hosts: localhost
+- hosts: nodes
 
   vars: 
     - exchange_item: meta.mathematica.stackexchange.com.7z
@@ -8,4 +8,4 @@
 
   tasks:
     - name: get stack overflow data
-      shell: "wget -nv -P {{dest_dir}} {{url}} creates={{dest_dir}}/{{exchange_item}}"
+      shell: "wget -nv -P {{dest_dir}} {{url}}
