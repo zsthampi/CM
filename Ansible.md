@@ -10,13 +10,9 @@ In general, Ansible (like Salt, Chef, and Puppet), use a central server that con
 Follow these steps to install Ansible on your configuration server.
 
 ```bash
-sudo apt-get update
-# Basic dev deps
-sudo apt-get -y install git make vim python-dev python-pip libffi-dev libssl-dev libxml2-dev libxslt1-dev libjpeg8-dev zlib1g-dev
-# Ansible, setuptools, dopy
-pip install ansible==2.2.0
-pip install -U pip setuptools>=11.3
-pip install dopy==0.3.5
+ansible-box> $ sudo apt-add-repository ppa:ansible/ansible
+ansible-box> $ sudo apt-get update
+ansible-box> $ sudo apt-get install ansible
 ```
 
 ## Setting up inventory file and ssh keys
